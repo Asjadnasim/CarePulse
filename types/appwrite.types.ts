@@ -21,8 +21,7 @@ export interface Patient extends Models.Document {
 	pastMedicalHistory: string | undefined;
 	identificationType: string | undefined;
 	identificationNumber: string | undefined;
-	identificationDocumentId: FormData | undefined;
-	identificationDocumentUrl: FormData | undefined;
+	identificationDocument: FormData | undefined;
 }
 
 export interface Appointment extends Models.Document {
