@@ -3,13 +3,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
 import { Form, FormControl } from '@/components/ui/form';
 import CustomFormField from '../CustomFormField';
 import SubmitButton from '../SubmitButton';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createUser, registerPatient } from '@/lib/actions/patient.actions';
+import { registerPatient } from '@/lib/actions/patient.actions';
 import { FormFieldType } from './PatientForm';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import {
@@ -63,34 +62,6 @@ const RegisterForm = ({ user }: { user: User }) => {
 				birthDate: new Date(values.birthDate),
 				identificationDocument: formData,
 			};
-
-			// const patient = {
-			// 	userId: user.$id,
-			// 	name: values.name,
-			// 	email: values.email,
-			// 	phone: values.phone,
-			// 	birthDate: new Date(values.birthDate),
-			// 	gender: values.gender,
-			// 	address: values.address,
-			// 	occupation: values.occupation,
-			// 	emergencyContactName: values.emergencyContactName,
-			// 	emergencyContactNumber: values.emergencyContactNumber,
-			// 	primaryPhysician: values.primaryPhysician,
-			// 	insuranceProvider: values.insuranceProvider,
-			// 	insurancePolicyNumber: values.insurancePolicyNumber,
-			// 	allergies: values.allergies,
-			// 	currentMedication: values.currentMedication,
-			// 	familyMedicalHistory: values.familyMedicalHistory,
-			// 	pastMedicalHistory: values.pastMedicalHistory,
-			// 	identificationType: values.identificationType,
-			// 	identificationNumber: values.identificationNumber,
-			// 	identificationDocument: values.identificationDocument
-			// 		? formData
-			// 		: undefined,
-			// 	privacyConsent: values.privacyConsent,
-			// };
-
-			// const newPatient = await registerPatient(patient);
 
 			// @ts-ignore
 			const patient = await registerPatient(patientData);
