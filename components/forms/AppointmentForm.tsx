@@ -6,27 +6,31 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import CustomFormField from '../CustomFormField';
 import SubmitButton from '../SubmitButton';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { getAppointmentSchema } from '@/lib/validation';
 import { useRouter } from 'next/navigation';
-import { createUser } from '@/lib/actions/patient.actions';
 import { FormFieldType } from './PatientForm';
 import { Doctors } from '@/constants';
 import { SelectItem } from '../ui/select';
 import Image from 'next/image';
 import { Appointment } from '@/types/appwrite.types';
-import { createAppointment } from '@/lib/actions/appointment.actions';
+import {
+	createAppointment,
+	updateAppointment,
+} from '@/lib/actions/appointment.actions';
 
 const AppointmentForm = ({
 	userId,
 	patientId,
 	type,
 	appointment,
+	setOpen,
 }: {
 	userId: string;
 	patientId: string;
 	appointment?: Appointment;
 	type: 'create' | 'cancel' | 'schedule';
+	setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
@@ -80,6 +84,25 @@ const AppointmentForm = ({
 					router.push(
 						`/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
 					);
+				}
+			} else {
+				const appointmentToUpdate = {
+					userId,
+					appointmentId: appointment?.$id!,
+					appointment: {
+						primaryPhysician: values.primaryPhysician,
+						schedule: new Date(values.schedule),
+						status: status as Status,
+						cancellationReason: values.cancellationReason,
+					},
+					type,
+				};
+
+				const updatedAppointment = await updateAppointment(appointmentToUpdate);
+
+				if (updatedAppointment) {
+					setOpen && setOpen(false);
+					form.reset();
 				}
 			}
 		} catch (error) {
